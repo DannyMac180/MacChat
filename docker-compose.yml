@@ -13,7 +13,7 @@ services:
     restart: always
     user: "${UID}:${GID}"
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:192.168.127.2"
     environment:
       - HOST=0.0.0.0
       - MONGO_URI=mongodb://mongodb:27017/LibreChat
