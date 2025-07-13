@@ -28,9 +28,12 @@ const getModelsConfig = async (req) => {
 async function loadModels(req) {
   const cache = getLogStores(CacheKeys.CONFIG_STORE);
   const cachedModelsConfig = await cache.get(CacheKeys.MODELS_CONFIG);
+  console.log('[DEBUG] loadModels called, cached config exists:', !!cachedModelsConfig);
   if (cachedModelsConfig) {
+    console.log('[DEBUG] Returning cached models config');
     return cachedModelsConfig;
   }
+  console.log('[DEBUG] No cached config, loading fresh models for user:', req.user?.id);
   const defaultModelsConfig = await loadDefaultModels(req);
   const customModelsConfig = await loadConfigModels(req);
 

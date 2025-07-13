@@ -1,4 +1,4 @@
-# AGENT.md - LibreChat Development Guide
+# AGENT.md - MacChat Development Guide
 
 ## Build/Test/Lint Commands
 - **Build Frontend:** `npm run frontend` (builds all packages + client)
@@ -8,6 +8,13 @@
 - **Lint & Format:** `npm run lint:fix`, `npm run format`
 - **Dev Servers:** `npm run backend:dev` (API), `npm run frontend:dev` (client)
 - **E2E Tests:** `npm run e2e`, `npm run e2e:headed` (with UI)
+
+## Container Management (Podman)
+- **List containers:** `podman ps`
+- **Restart backend:** `podman restart MacChat`
+- **Restart all services:** `podman restart MacChat chat-mongodb chat-meilisearch vectordb rag_api`
+- **View logs:** `podman logs MacChat`
+- **Stop/Start:** `podman stop MacChat` / `podman start MacChat`
 
 ## Architecture & Structure
 - **Monorepo:** Uses npm workspaces with `api/`, `client/`, `packages/`

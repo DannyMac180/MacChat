@@ -1,7 +1,7 @@
 {
-  "name": "LibreChat",
+  "name": "MacChat",
   "version": "v0.7.9-rc1",
-  "description": "",
+  "description": "Enhanced ChatGPT Clone with OpenRouter model fetching fix: Features OpenAI, GPT-4 Vision, Bing, Anthropic, OpenRouter (300+ models), Google Gemini, AI model switching, message search, langchain, DALL-E-3, ChatGPT Plugins, OpenAI Functions, Secure Multi-User System, Presets, completely open-source for self-hosting.",
   "workspaces": [
     "api",
     "client",

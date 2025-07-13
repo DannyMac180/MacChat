@@ -118,6 +118,8 @@ export const useUpdateUserKeysMutation = (): UseMutationResult<
   return useMutation((payload: t.TUpdateUserKeyRequest) => dataService.updateUserKey(payload), {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries([QueryKeys.name, variables.name]);
+      // Invalidate models cache when API keys are updated to refresh available models
+      queryClient.invalidateQueries([QueryKeys.models]);
     },
   });
 };

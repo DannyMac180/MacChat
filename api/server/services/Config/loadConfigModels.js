@@ -9,6 +9,7 @@ const { getCustomConfig } = require('./getCustomConfig');
  * @param {Express.Request} req - The Express request object.
  */
 async function loadConfigModels(req) {
+    console.log('[DEBUG] loadConfigModels called for user:', req.user?.id);
     const customConfig = await getCustomConfig();
 
     if (!customConfig) {
@@ -92,9 +93,11 @@ async function loadConfigModels(req) {
             // Try to get user's API key from the request
             try {
                 const { getUserKeyValues } = require('~/server/services/UserService');
+                console.log(`[DEBUG] Attempting to fetch models for user-provided endpoint: ${name}`);
                 const userValues = await getUserKeyValues({ userId: req.user.id, name });
 
                 if (userValues?.apiKey) {
+                    console.log(`[DEBUG] Found user API key for ${name}, fetching models...`);
                     fetchPromisesMap[uniqueKey] =
                         fetchPromisesMap[uniqueKey] ||
                         fetchModels({
@@ -107,8 +110,11 @@ async function loadConfigModels(req) {
                     uniqueKeyToEndpointsMap[uniqueKey] = uniqueKeyToEndpointsMap[uniqueKey] || [];
                     uniqueKeyToEndpointsMap[uniqueKey].push(name);
                     continue;
+                } else {
+                    console.log(`[DEBUG] No user API key found for ${name}`);
                 }
             } catch (error) {
+                console.log(`[DEBUG] Error getting user key for ${name}:`, error.message);
                 // If user hasn't provided API key yet, fall back to default models
                 // This is expected behavior for user-provided keys
             }

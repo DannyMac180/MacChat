@@ -3,20 +3,22 @@
 
 services:
   api:
-    container_name: LibreChat
+    container_name: MacChat
     ports:
       - "${PORT}:${PORT}"
     depends_on:
       - mongodb
       - rag_api
-    image: ghcr.io/danny-avila/librechat-dev:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     user: "${UID}:${GID}"
     extra_hosts:
       - "host.docker.internal:192.168.127.2"
     environment:
       - HOST=0.0.0.0
-      - MONGO_URI=mongodb://mongodb:27017/LibreChat
+      - MONGO_URI=mongodb://mongodb:27017/MacChat
       - MEILI_HOST=http://meilisearch:7700
       - RAG_PORT=${RAG_PORT:-8000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
