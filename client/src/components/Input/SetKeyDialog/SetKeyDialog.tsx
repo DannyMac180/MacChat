@@ -150,7 +150,12 @@ const SetKeyDialog = ({
       return;
     }
 
-    saveKey(userKey);
+    // For Groq, we need to format the key as JSON to match backend expectations
+    if (endpoint === 'groq') {
+      saveKey(JSON.stringify({ apiKey: userKey }));
+    } else {
+      saveKey(userKey);
+    }
     setUserKey('');
   };
 

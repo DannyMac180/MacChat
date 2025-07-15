@@ -48,7 +48,10 @@ async function loadAsyncEndpoints(req) {
         }
       : false;
 
-  return { google, gptPlugins };
+  // Add Groq configuration
+  const groq = config[EModelEndpoint.groq] || false;
+
+  return { google, gptPlugins, groq };
 }
 
 module.exports = loadAsyncEndpoints;

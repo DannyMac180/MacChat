@@ -326,6 +326,91 @@ const getBedrockModels = () => {
   return models;
 };
 
+/**
+ * Fetches Groq models from the API.
+ * @param {Object} opts - The options for fetching models.
+ * @param {string} opts.user - The user ID to send to the API.
+ * @param {string[]} [_models=[]] - The models to use as a fallback.
+ */
+const fetchGroqModels = async (opts, _models = []) => {
+  let models = _models.slice() ?? [];
+  let apiKey = process.env.GROQ_API_KEY;
+  const groqBaseURL = 'https://api.groq.com/openai/v1';
+  let baseURL = groqBaseURL;
+  let reverseProxyUrl = process.env.GROQ_REVERSE_PROXY;
+
+  if (reverseProxyUrl) {
+    baseURL = extractBaseURL(reverseProxyUrl);
+  }
+
+  // Handle user-provided API key
+  if (isUserProvided(apiKey)) {
+    try {
+      const { getUserKeyValues } = require('~/server/services/UserService');
+      const userValues = await getUserKeyValues({ userId: opts.user, name: EModelEndpoint.groq });
+      if (userValues?.apiKey) {
+        apiKey = userValues.apiKey;
+      } else {
+        // If user hasn't provided API key yet, return default models
+        return models;
+      }
+    } catch (error) {
+      logger.error('Error getting user Groq API key:', error);
+      return models;
+    }
+  }
+
+  if (!apiKey) {
+    return models;
+  }
+
+  const modelsCache = getLogStores(CacheKeys.MODEL_QUERIES);
+
+  // Use user-specific cache key if user provided the API key
+  const cacheKey = isUserProvided(process.env.GROQ_API_KEY) ? `${baseURL}:${opts.user}` : baseURL;
+  
+  const cachedModels = await modelsCache.get(cacheKey);
+  if (cachedModels) {
+    return cachedModels;
+  }
+
+  if (baseURL) {
+    models = await fetchModels({
+      apiKey,
+      baseURL,
+      user: opts.user,
+      name: EModelEndpoint.groq,
+      tokenKey: EModelEndpoint.groq,
+    });
+  }
+
+  if (models.length === 0) {
+    return _models;
+  }
+
+  await modelsCache.set(cacheKey, models);
+  return models;
+};
+
+const getGroqModels = async (opts = {}) => {
+  let models = defaultModels[EModelEndpoint.groq];
+  if (process.env.GROQ_MODELS) {
+    models = splitAndTrim(process.env.GROQ_MODELS);
+    return models;
+  }
+
+  if (isUserProvided(process.env.GROQ_API_KEY)) {
+    return models;
+  }
+
+  try {
+    return await fetchGroqModels(opts, models);
+  } catch (error) {
+    logger.error('Error fetching Groq models:', error);
+    return models;
+  }
+};
+
 module.exports = {
   fetchModels,
   splitAndTrim,
@@ -334,4 +419,5 @@ module.exports = {
   getChatGPTBrowserModels,
   getAnthropicModels,
   getGoogleModels,
+  getGroqModels,
 };

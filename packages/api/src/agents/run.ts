@@ -16,6 +16,7 @@ const customProviders = new Set([
   Providers.OLLAMA,
   Providers.DEEPSEEK,
   Providers.OPENROUTER,
+  'groq', // Groq uses OpenAI-compatible API
 ]);
 
 /**
@@ -75,6 +76,10 @@ export async function createRun({
   } else if (
     llmConfig.configuration?.baseURL?.includes(KnownEndpoints.openrouter) ||
     (agent.endpoint && agent.endpoint.toLowerCase().includes(KnownEndpoints.openrouter))
+  ) {
+    reasoningKey = 'reasoning';
+  } else if (
+    agent.endpoint && agent.endpoint.toLowerCase().includes(KnownEndpoints.groq)
   ) {
     reasoningKey = 'reasoning';
   } else if (

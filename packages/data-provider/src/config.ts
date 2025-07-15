@@ -753,6 +753,7 @@ export const configSchema = z.object({
       [EModelEndpoint.agents]: agentsEndpointSchema.optional(),
       [EModelEndpoint.custom]: z.array(endpointSchema.partial()).optional(),
       [EModelEndpoint.bedrock]: baseEndpointSchema.optional(),
+      [EModelEndpoint.groq]: baseEndpointSchema.optional(),
     })
     .strict()
     .refine((data) => Object.keys(data).length > 0, {
@@ -806,6 +807,7 @@ export const defaultEndpoints: EModelEndpoint[] = [
   EModelEndpoint.anthropic,
   EModelEndpoint.custom,
   EModelEndpoint.bedrock,
+  EModelEndpoint.groq,
 ];
 
 export const alternateName = {
@@ -820,6 +822,7 @@ export const alternateName = {
   [EModelEndpoint.anthropic]: 'Anthropic',
   [EModelEndpoint.custom]: 'Custom',
   [EModelEndpoint.bedrock]: 'AWS Bedrock',
+  [EModelEndpoint.groq]: 'Groq',
   [KnownEndpoints.ollama]: 'Ollama',
   [KnownEndpoints.deepseek]: 'DeepSeek',
   [KnownEndpoints.xai]: 'xAI',
@@ -931,6 +934,20 @@ export const defaultModels = {
     'gpt-3.5-turbo-instruct',
   ],
   [EModelEndpoint.bedrock]: bedrockModels,
+  [EModelEndpoint.groq]: [
+    'llama-3.1-70b-versatile',
+    'llama-3.1-8b-instant',
+    'llama-3.2-1b-preview',
+    'llama-3.2-3b-preview',
+    'llama-3.2-11b-text-preview',
+    'llama-3.2-90b-text-preview',
+    'llama-3.3-70b-versatile',
+    'llama-3.3-70b-specdec',
+    'mixtral-8x7b-32768',
+    'gemma-7b-it',
+    'gemma2-9b-it',
+    'moonshotai/kimi-k2-instruct',
+  ],
 };
 
 const fitlerAssistantModels = (str: string) => {
@@ -950,6 +967,7 @@ export const initialModelsConfig: TModelsConfig = {
   [EModelEndpoint.google]: defaultModels[EModelEndpoint.google],
   [EModelEndpoint.anthropic]: defaultModels[EModelEndpoint.anthropic],
   [EModelEndpoint.bedrock]: defaultModels[EModelEndpoint.bedrock],
+  [EModelEndpoint.groq]: defaultModels[EModelEndpoint.groq],
 };
 
 export const EndpointURLs = {
@@ -967,6 +985,7 @@ export const modularEndpoints = new Set<EModelEndpoint | string>([
   EModelEndpoint.custom,
   EModelEndpoint.agents,
   EModelEndpoint.bedrock,
+  EModelEndpoint.groq,
 ]);
 
 export const supportsBalanceCheck = {
@@ -979,6 +998,7 @@ export const supportsBalanceCheck = {
   [EModelEndpoint.azureAssistants]: true,
   [EModelEndpoint.azureOpenAI]: true,
   [EModelEndpoint.bedrock]: true,
+  [EModelEndpoint.groq]: true,
 };
 
 export const visionModels = [
@@ -1524,6 +1544,7 @@ export const providerEndpointMap = {
   [EModelEndpoint.bedrock]: EModelEndpoint.bedrock,
   [EModelEndpoint.anthropic]: EModelEndpoint.anthropic,
   [EModelEndpoint.azureOpenAI]: EModelEndpoint.azureOpenAI,
+  [EModelEndpoint.groq]: EModelEndpoint.openAI, // Groq uses OpenAI-compatible API
 };
 
 export const specialVariables = {

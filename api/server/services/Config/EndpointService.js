@@ -11,10 +11,12 @@ const {
   CHATGPT_TOKEN: chatGPTToken,
   PLUGINS_USE_AZURE,
   GOOGLE_KEY: googleKey,
+  GROQ_API_KEY: groqApiKey,
   OPENAI_REVERSE_PROXY,
   AZURE_OPENAI_BASEURL,
   ASSISTANTS_BASE_URL,
   AZURE_ASSISTANTS_BASE_URL,
+  GROQ_REVERSE_PROXY,
 } = process.env ?? {};
 
 const useAzurePlugins = !!PLUGINS_USE_AZURE;
@@ -47,6 +49,7 @@ module.exports = {
     [EModelEndpoint.bedrock]: generateConfig(
       process.env.BEDROCK_AWS_SECRET_ACCESS_KEY ?? process.env.BEDROCK_AWS_DEFAULT_REGION,
     ),
+    [EModelEndpoint.groq]: generateConfig(groqApiKey ?? 'user_provided', GROQ_REVERSE_PROXY),
     /* key will be part of separate config */
     [EModelEndpoint.agents]: generateConfig('true', undefined, EModelEndpoint.agents),
   },

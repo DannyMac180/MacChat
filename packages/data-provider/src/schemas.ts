@@ -25,6 +25,7 @@ export enum EModelEndpoint {
   agents = 'agents',
   custom = 'custom',
   bedrock = 'bedrock',
+  groq = 'groq',
   /** @deprecated */
   chatGPTBrowser = 'chatGPTBrowser',
   /** @deprecated */
@@ -39,6 +40,7 @@ export const paramEndpoints = new Set<EModelEndpoint | string>([
   EModelEndpoint.anthropic,
   EModelEndpoint.custom,
   EModelEndpoint.google,
+  EModelEndpoint.groq,
 ]);
 
 export enum BedrockProviders {
@@ -405,6 +407,7 @@ export const endpointSettings = {
   [EModelEndpoint.anthropic]: anthropicSettings,
   [EModelEndpoint.agents]: agentsSettings,
   [EModelEndpoint.bedrock]: agentsSettings,
+  [EModelEndpoint.groq]: openAISettings,
 };
 
 const google = endpointSettings[EModelEndpoint.google];

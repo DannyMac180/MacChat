@@ -5,6 +5,7 @@ const getBedrockOptions = require('~/server/services/Endpoints/bedrock/options')
 const initOpenAI = require('~/server/services/Endpoints/openAI/initialize');
 const initCustom = require('~/server/services/Endpoints/custom/initialize');
 const initGoogle = require('~/server/services/Endpoints/google/initialize');
+const initGroq = require('~/server/services/Endpoints/groq/initialize');
 const { getCustomEndpointConfig } = require('~/server/services/Config');
 
 /** Check if the provider is a known custom provider
@@ -27,6 +28,7 @@ const providerConfigMap = {
   [EModelEndpoint.azureOpenAI]: initOpenAI,
   [EModelEndpoint.anthropic]: initAnthropic,
   [EModelEndpoint.bedrock]: getBedrockOptions,
+  [EModelEndpoint.groq]: initGroq,
 };
 
 /**
